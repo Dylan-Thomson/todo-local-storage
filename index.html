@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>To Do App!</title>
+
+  <style>
+    #todo-item {
+      font-weight: 700;
+      font-size: 2em;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Title -->
+  <h1>My To Do's!</h1>
+
+  <!-- Input Form -->
+  <form>
+    <span id="todo-item">To Do Item: <input id="to-do" type="text" ><input id="add-to-do" value="Add Item" type="submit"></span>
+  </form>
+
+  <hr>
+
+  <!-- To-Do List -->
+  <div id="to-dos"></div>
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Script -->
+  <script>
+
+    // TODO: Change todos to associative array
+    var toDoCount = 0;
+    var todos = [];
+    $("#add-to-do").on("click", function(event) {
+      event.preventDefault();
+      var newToDo = $("#to-do").val();
+      displayToDo(newToDo, toDoCount);
+      toDoCount++;
+      todos.push(newToDo);
+      localStorage.setItem("todos", JSON.stringify(todos));
+    });
+    
+    function displayToDo(text, num) {
+      var p = $("<p>");
+      p.attr("id", "item-" + num);
+      p.text(text);
+      var button = $("<button>");
+      button.attr("id", "button-" + num);
+      button.attr("data-to-do", num);
+      button.addClass("checkbox");
+      button.text("\u2714");
+      p.prepend(button);
+      $("#to-dos").append(p);
+      $("#to-do").val("");
+    }
+
+
+    $(document.body).on("click", ".checkbox", function() {
+      var toDoNumber = $(this).attr("data-to-do");
+      var todo = $("#item-" + toDoNumber);
+
+      //index of
+      todos.splice(todos.indexOf(todo), 1);
+      $("#item-" + toDoNumber).empty();
+      localStorage.setItem("todos", JSON.stringify(todos));
+    });
+  </script>
+</body>
+
+</html>
